@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);}
+body{margin:0; font:14px system-ui, -apple-system, sans-serif;}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>JURAN 투자 제안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700&family=Hahmlet:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 악보를 뼈대로 쓴다. 오선이 장을 끊고, 마디 번호가 차례를 매기고,
+   음표 머리가 기능의 있고 없음을 나타낸다. 어두운 띠 둘이 주장을, 밝은 면이 근거를 받는다. */
+:root{
+  --paper:#F4F5F7; --surface:#FFFFFF; --tint:#EAECF0;
+  --ink:#0F1217; --ink-2:#39414D; --muted:#6E7783; --line:#D7DBE1; --hair:#C3C9D2;
+  --red:#C0233A; --red-soft:#F6E7EA; --blue:#27548F;
+  --dark-bg:#0F1217; --dark-fg:#F4F5F7; --dark-fg2:#CBD2DC; --dark-mut:#9099A6;
+  --dark-line:#2B323D; --dark-red:#E8899A;
+  --nav-bg:rgba(244,245,247,.93);
+  --display:'Hahmlet', 'Nanum Myeongjo', serif;
+  --sans:'Gothic A1', system-ui, -apple-system, sans-serif;
+  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --gut:max(18px, env(safe-area-inset-left,0px));
+  --gutr:max(18px, env(safe-area-inset-right,0px));
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#0F1217; --surface:#171B22; --tint:#14181E;
+  --ink:#EDEFF3; --ink-2:#B4BCC7; --muted:#858E9B; --line:#272D37; --hair:#333A45;
+  --red:#E35A6B; --red-soft:#2B1D21; --blue:#5A8CD0;
+  --dark-bg:#060809; --dark-fg:#EDEFF3; --dark-fg2:#C2CAD5; --dark-mut:#858E9B;
+  --dark-line:#242B35; --dark-red:#E8899A;
+  --nav-bg:rgba(15,18,23,.93);
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0F1217; --surface:#171B22; --tint:#14181E;
+  --ink:#EDEFF3; --ink-2:#B4BCC7; --muted:#858E9B; --line:#272D37; --hair:#333A45;
+  --red:#E35A6B; --red-soft:#2B1D21; --blue:#5A8CD0;
+  --dark-bg:#060809; --dark-fg:#EDEFF3; --dark-fg2:#C2CAD5; --dark-mut:#858E9B;
+  --dark-line:#242B35; --dark-red:#E8899A;
+  --nav-bg:rgba(15,18,23,.93);
+  color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans);
+  font-size:15.5px; line-height:1.8; -webkit-font-smoothing:antialiased;}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px);
+  z-index:40; background:var(--nav-bg);}
+p{margin:0}
+h1,h2,h3,h4{margin:0; text-wrap:balance}
+a{color:inherit}
+
+/* ── 띠와 폭 ── */
+.band{width:100%; position:relative}
+.band.tint{background:var(--tint)}
+.band.dark{background:var(--dark-bg); color:var(--dark-fg)}
+.wrap{max-width:940px; margin:0 auto; padding-left:var(--gut); padding-right:var(--gutr);
+  padding-block:68px;}
+.band.dark .wrap{padding-block:82px}
+.stack{display:flex; flex-direction:column; gap:26px}
+
+/* ── 상단 마디 번호 띠 ── */
+nav{position:sticky; top:env(safe-area-inset-top,0px); z-index:30;
+  background:var(--nav-bg); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);}
+.navin{max-width:940px; margin:0 auto; padding-left:var(--gut); padding-right:var(--gutr);
+  display:flex; align-items:center; gap:4px; height:46px; overflow-x:auto; scrollbar-width:none;}
+.navin::-webkit-scrollbar{display:none}
+.navin .brand{font-family:var(--display); font-weight:700; font-size:16px; letter-spacing:.06em;
+  margin-right:14px; white-space:nowrap;}
+nav a{font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.08em;
+  color:var(--muted); text-decoration:none; padding:5px 9px; border-radius:3px; white-space:nowrap;
+  border:1px solid transparent;}
+nav a:hover{color:var(--ink); background:var(--surface)}
+nav a.on{color:var(--red); border-color:var(--hair); background:var(--surface)}
+nav a:focus-visible{outline:2px solid var(--red); outline-offset:1px}
+
+/* ── 오선과 마디 번호 ── */
+.staff{display:flex; flex-direction:column; gap:7px; width:100%}
+.staff i{display:block; height:1px; background:var(--hair)}
+.band.dark .staff i{background:var(--dark-line)}
+.opener{margin-bottom:30px}
+.measure{display:flex; align-items:baseline; gap:12px; margin-bottom:11px}
+.measure b{font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.16em;
+  color:var(--red);}
+.measure span{font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--muted);
+  text-transform:uppercase;}
+.band.dark .measure span{color:var(--dark-mut)}
+
+h2{font-family:var(--display); font-weight:700; font-size:clamp(25px,4.3vw,40px);
+  line-height:1.38; letter-spacing:-.015em; margin-top:16px;}
+h3{font-size:16px; font-weight:700; letter-spacing:-.005em; line-height:1.55}
+.lead{font-size:17px; line-height:1.85; color:var(--ink-2); max-width:60ch}
+.band.dark .lead{color:var(--dark-fg2)}
+.band.dark h2{color:var(--dark-fg)}
+.note{font-size:13px; line-height:1.75; color:var(--muted)}
+em.hl{font-style:normal; background:var(--red-soft); color:var(--red);
+  padding:1px 6px; border-radius:3px; font-weight:700;}
+
+/* ── 표지 ── */
+.hero{background:var(--dark-bg); color:var(--dark-fg)}
+.hero .wrap{padding-block:clamp(60px,11vw,104px)}
+.hero .tag{font-family:var(--mono); font-size:11px; letter-spacing:.3em; color:var(--dark-red);
+  text-transform:uppercase; margin-bottom:30px;}
+h1{font-family:var(--display); font-weight:900; font-size:clamp(31px,6.6vw,60px);
+  line-height:1.26; letter-spacing:-.03em;}
+h1 .q{color:var(--dark-red); display:block}
+.keystone{border-left:3px solid var(--dark-red); padding:4px 0 4px 20px; margin-bottom:34px}
+.keystone p{font-family:var(--display); font-weight:700; font-size:clamp(19px,3.2vw,27px);
+  line-height:1.45; letter-spacing:-.015em; color:var(--dark-fg);}
+.keystone em{font-style:normal; color:var(--dark-red)}
+.keystone span{display:block; margin-top:13px; font-size:14px; line-height:1.8; color:var(--dark-fg2); max-width:60ch}
+.keystone b{color:var(--dark-fg); font-weight:700}
+.keystone .find{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.keystone .find i{font-style:normal; font-family:var(--mono); font-size:11.5px; letter-spacing:.02em;
+  color:var(--dark-fg2); border:1px solid var(--dark-line); border-radius:3px; padding:5px 10px; white-space:nowrap}
+.site{display:inline-flex; align-items:baseline; gap:10px; margin-top:18px; text-decoration:none;
+  border-bottom:1px solid var(--dark-red); padding-bottom:3px}
+.site b{font-family:var(--mono); font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--dark-red)}
+.site span{font-size:13px; color:var(--dark-fg2)}
+.site:hover b{color:var(--dark-fg)}
+.site:focus-visible{outline:2px solid var(--dark-red); outline-offset:3px}
+nav .live{margin-left:auto; font-family:var(--mono); font-size:11px; font-weight:600; color:var(--red);
+  text-decoration:none; padding:5px 10px; border:1px solid var(--hair); border-radius:3px; white-space:nowrap}
+nav .live:hover{background:var(--surface)}
+.hero .lead{color:var(--dark-fg2); margin-top:26px; max-width:56ch}
+.hero .note{color:var(--dark-mut)}
+.hero .staff{margin:44px 0 26px; max-width:none}
+.kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:28px 24px}
+.kpi b{display:block; font-family:var(--mono); font-weight:500; font-size:clamp(26px,4.6vw,38px);
+  letter-spacing:-.035em; font-variant-numeric:tabular-nums; line-height:1.1;}
+.kpi span{display:block; font-size:12.5px; line-height:1.6; color:var(--dark-mut); margin-top:10px}
+
+/* ── 카드 ── */
+.grid2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+.grid3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:6px;
+  padding:22px 22px 24px; min-width:0;}
+.card h3{margin-bottom:9px}
+.card p{font-size:14px; line-height:1.8; color:var(--ink-2)}
+.card .when{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; color:var(--muted);
+  display:block; margin-bottom:11px;}
+.card.key{border-left:3px solid var(--red)}
+.card.key h3{color:var(--red)}
+
+/* ── 흐름도 ── */
+.flow{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:26px 22px}
+.pipe{display:grid; grid-template-columns:repeat(6,1fr); gap:8px}
+.pstep{text-align:center; min-width:0; padding:13px 6px; border-radius:5px;
+  background:var(--tint); border:1px solid transparent;}
+.pstep b{display:block; font-size:13.5px; font-weight:700}
+.pstep span{display:block; font-family:var(--mono); font-size:9.5px; color:var(--muted); margin-top:4px}
+.pstep.end{background:var(--red-soft); border-color:var(--red)}
+.pstep.end b{color:var(--red)}
+.backloop{display:flex; align-items:center; gap:10px; margin-top:14px;
+  font-family:var(--mono); font-size:11px; letter-spacing:.05em; color:var(--red);}
+.backloop i{flex:1; height:1px; background:var(--red); opacity:.45}
+
+/* ── 큰 수 ── */
+.huge{font-family:var(--mono); font-weight:500; font-size:clamp(52px,14vw,124px);
+  line-height:.95; letter-spacing:-.05em; color:var(--dark-red); display:block;}
+.huge sup{font-size:.4em; vertical-align:super; letter-spacing:-.02em}
+.huge sup.plus{font-size:.3em; margin-left:.06em}
+.against{display:flex; flex-wrap:wrap; gap:10px 26px; align-items:baseline; margin-top:22px;
+  padding-top:22px; border-top:1px solid var(--dark-line); font-size:14.5px; color:var(--dark-mut);}
+.against b{font-family:var(--mono); font-weight:500; font-size:24px; color:var(--dark-fg);
+  letter-spacing:-.02em;}
+
+/* ── 표 ── */
+.scroll{overflow-x:auto; border:1px solid var(--line); border-radius:6px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:700px; font-size:13.5px}
+th,td{text-align:left; padding:14px 15px; border-bottom:1px solid var(--line); vertical-align:top;
+  line-height:1.65;}
+thead th{font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  background:var(--tint); white-space:nowrap; padding-top:12px; padding-bottom:12px;}
+thead th.j{background:var(--red); color:#fff; letter-spacing:.1em}
+tbody td.j{background:var(--red-soft)}
+tbody tr:last-child td{border-bottom:0}
+th:first-child,td:first-child{font-weight:500; width:24%}
+td .sub{display:block; font-size:12px; color:var(--muted); margin-top:3px; line-height:1.6}
+.cap{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--muted);
+  text-transform:uppercase; margin-bottom:11px;}
+.hint{font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:8px}
+
+/* 음표 머리로 있고 없음을 표시 */
+.nh{display:inline-block; width:13px; height:9.5px; border-radius:50%;
+  transform:rotate(-21deg); vertical-align:0; margin-right:8px; flex:none;}
+.nh.y{background:var(--red)}
+.nh.n{background:transparent; border:2.5px solid var(--hair)}
+.nh.p{background:transparent; border:2.5px solid var(--blue)}
+.mk{display:flex; align-items:center}
+.mk.y{color:var(--red); font-weight:700}
+.mk.n{color:var(--muted)}
+.mk.p{color:var(--blue); font-weight:700}
+
+/* ── 전제 단가 ── */
+.assume{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px}
+.assume div{background:var(--surface); border:1px solid var(--line); border-radius:5px; padding:14px 15px; min-width:0}
+.assume b{display:block; font-family:var(--mono); font-weight:600; font-size:17px; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;}
+.assume span{display:block; font-size:11.5px; color:var(--muted); margin-top:5px; line-height:1.55}
+td.num{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; text-align:right}
+td.gap{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; text-align:right;
+  color:var(--red); font-weight:600;}
+td.gap .krw{display:block; font-family:var(--sans); font-size:11.5px; font-weight:400;
+  color:var(--muted); margin-top:2px;}
+th.num,th.gap{text-align:right}
+tr.flip td{color:var(--muted)}
+tr.flip td.gap{color:var(--muted); font-weight:400}
+
+/* ── 막대 ── */
+.chart{display:flex; flex-direction:column; gap:20px}
+.bar{display:block; border-bottom:1px solid var(--line); padding-bottom:16px}
+.chart .bar:last-child{border-bottom:0; padding-bottom:0}
+.bar .hd{display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-bottom:9px}
+.bar .hd span{font-size:14px; font-weight:500}
+.bar .hd b{font-family:var(--mono); font-weight:600; font-size:19px; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums; white-space:nowrap;}
+.track{height:14px; background:var(--tint); border-radius:0 5px 5px 0; overflow:hidden}
+.band.tint .track{background:var(--paper)}
+.fill{display:block; height:100%; border-radius:0 5px 5px 0; transition:filter .15s}
+.bar:hover .fill{filter:brightness(1.1)}
+.fill.r{background:var(--red)} .fill.b{background:var(--blue)}
+.bar .by{font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:8px; display:block}
+.key2{display:flex; gap:22px; flex-wrap:wrap; font-size:13px; color:var(--ink-2); margin-bottom:18px}
+.key2 i{display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:7px;
+  vertical-align:-1px;}
+
+/* ── 목록 ── */
+.useit{display:flex; flex-direction:column}
+.useit div{display:flex; justify-content:space-between; align-items:baseline; gap:18px;
+  padding:13px 0; border-bottom:1px solid var(--line); font-size:14.5px;}
+.useit div:last-child{border-bottom:0}
+.useit em{font-style:normal; font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  color:var(--red); text-transform:uppercase; white-space:nowrap;}
+
+/* ── 출처 ── */
+.srcs{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 26px;
+  font-size:12.5px; line-height:1.95; color:var(--muted);}
+.srcs a{color:var(--ink-2); text-underline-offset:2px}
+footer .wrap{padding-block:48px}
+
+@media (max-width:720px){
+  .wrap{padding-block:48px}
+  .band.dark .wrap{padding-block:56px}
+  .kpis{grid-template-columns:1fr; gap:22px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .pipe{grid-template-columns:repeat(3,1fr)}
+  .assume{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .srcs{grid-template-columns:1fr}
+  .opener{margin-bottom:24px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important; transition:none!important}}
+html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:64px}
+</style>
+</head>
+<body>
+
+
+<nav>
+  <div class="navin">
+    <span class="brand">JURAN</span>
+    <a href="#s1">01 빈자리</a><a href="#s2">02 구조</a><a href="#s3">03 규모</a>
+    <a href="#s4">04 비교</a><a href="#s5">05 운영비</a><a href="#s6">06 시장</a>
+    <a href="#s7">07 확장</a><a href="#s8">08 제안</a>
+    <a class="live" href="https://juranaimusic.com">juranaimusic.com ↗</a>
+  </div>
+</nav>
+
+<header class="hero band">
+  <div class="wrap">
+    <div class="tag">투자 제안 · 2026</div>
+    <div class="keystone">
+      <p>JURAN 엔진은 작곡과 작사에서 <em>저작권을 푸는 열쇠</em>입니다.</p>
+      <span>음원을 학습하지 않습니다. 사람의 기여가 기록으로 남습니다.
+        이 둘을 함께 하는 AI 작곡 · 작사 엔진을 저희는 아직 찾지 못했습니다.
+        <b>이 문장을 믿지 마시고 직접 검색해 보십시오.</b> 아래 넷이면 10분 안에
+        경쟁사가 어디에 서 있는지 보입니다.</span>
+      <div class="find">
+        <i>Suno lawsuit damages</i><i>Udio Universal settlement</i>
+        <i>음저협 AI 기준 철회</i><i>AI music training data</i>
+      </div>
+      <a class="site" href="https://juranaimusic.com"><b>juranaimusic.com</b><span>앱을 지금 열어 직접 한 곡 만들어 보십시오</span></a>
+    </div>
+    <h1>AI는 곡을 쏟아냅니다.<span class="q">그 곡은 권리가 되지 않습니다.</span></h1>
+    <p class="lead">
+      JURAN은 가사에서 악보를 만들고, 노래가 그 악보대로 불렸는지를 음표 하나 단위로 되짚어 봅니다.
+      그 과정이 그대로 남아 사람이 무엇을 만들었는지 보여 주는 기록이 됩니다.
+      지금 전 세계 음악 산업이 찾고 있는 것이 바로 그 기록입니다.
+    </p>
+    <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="kpis">
+      <div class="kpi"><b>$31.7B</b><span>2025년 세계 음반 시장<br>전년 대비 +6.4% · IFPI</span></div>
+      <div class="kpi"><b>€15.5B</b><span>2025년 세계 저작권 징수<br>전년 대비 +11.3% · CISAC</span></div>
+      <div class="kpi"><b>34%</b><span>2025년 11월 디어저 신규 업로드 중<br>완전 AI 생성 곡</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="band" id="s1">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>01</b><span>시장의 빈자리</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>공급은 터졌는데,<br>권리로 가는 길이 막혀 있습니다</h2>
+    </div>
+    <p class="lead">
+      AI로 만든 곡은 이미 넘칩니다. 디어저에 올라오는 새 곡 중 완전 AI 생성 곡은
+      2025년 11월에 34%였고, 2026년 6월에는 많은 날 절반을 넘었습니다.
+      그런데 그 곡들이 저작권으로 등록되는 길은 오히려 좁아지고 있습니다.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="when">2026.08.04</span>
+        <h3>기준이 나왔다가</h3>
+        <p>한국음악저작권협회가 AI 활용 음악의 신탁 기준을 발표했습니다.
+           사람이 작사·작곡·편곡에 참여했으면 등록할 수 있고,
+           AI를 어디에 어떻게 썼는지 보고해야 합니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">2026.08.25</span>
+        <h3>22일 만에 철회됐습니다</h3>
+        <p>문화체육관광부가 공론화를 권고하면서 기준이 거둬들여졌습니다.
+           이미 등록된 곡은 취소 절차에 들어갔고, 심사를 기다리던 곡은 보류됐습니다.</p>
+      </div>
+      <div class="card key">
+        <span class="when">2026.09.22</span>
+        <h3>다음 기준의 열쇠</h3>
+        <p>국회 토론회에서 나온 제안은 <em class="hl">제작 기록</em>입니다.
+           작사·작곡·편곡·보컬 단계마다 AI와 사람의 몫을 따로 적고,
+           작업 이력을 남기자는 것입니다.</p>
+      </div>
+    </div>
+    <p class="note">
+      곧 어떤 기준이 오든 요구는 하나로 모입니다. 사람이 무엇을 했는지 보여 달라는 것입니다.
+      음원 파일 하나만 내놓는 서비스는 이 요구에 답할 방법이 없습니다.
+    </p>
+  </div>
+</section>
+
+<section class="band tint" id="s2">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>02</b><span>JURAN의 구조</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>한 바퀴가 닫혀 있습니다</h2>
+    </div>
+    <p class="lead">
+      가사에서 시작해 악보를 만들고, 노래를 받아 다시 악보로 되돌립니다.
+      이 되돌아오는 단계가 다른 서비스에는 없습니다.
+    </p>
+    <div class="flow">
+      <div class="pipe">
+        <div class="pstep"><b>가사</b><span>100</span></div>
+        <div class="pstep"><b>작곡</b><span>200·300</span></div>
+        <div class="pstep"><b>편곡</b><span>400</span></div>
+        <div class="pstep"><b>악보</b><span>500</span></div>
+        <div class="pstep"><b>노래</b><span>600·700</span></div>
+        <div class="pstep end"><b>검증</b><span>800</span></div>
+      </div>
+      <div class="backloop"><span>검증 결과가 악보로 되돌아옵니다</span><i></i><span>↺</span></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>전 과정이 하나의 구조 안에 있습니다</h3>
+        <p>화음을 정하는 표가 딱 하나입니다. 악보에 적히는 화음, 반주가 연주하는 화음,
+           노래를 만들 때 보내는 화음이 모두 같은 표에서 나옵니다. 그래서 보이는 것과 들리는 것이 어긋나지 않습니다.
+           부분을 가져다 붙인 구조에서는 나오기 어려운 일치입니다.</p>
+      </div>
+      <div class="card key">
+        <h3>부른 결과를 음표 단위로 되짚습니다</h3>
+        <p>돌아온 노래에서 목소리를 떼어 내 음높이를 읽고, 원래 악보와 시간을 맞춘 뒤
+           음표마다 같음·다름·안 부름·흐림으로 판정합니다.
+           다른 음은 실제로 부른 높이로 옮겨 적고, 악보에 없던 음도 찾아 넣습니다.</p>
+      </div>
+      <div class="card">
+        <h3>악보가 남습니다</h3>
+        <p>사용자는 음표 하나, 화음 하나를 직접 고칠 수 있습니다.
+           MusicXML 파일로 내보내면 다른 악보 프로그램에서도 열립니다.
+           고친 악보는 그대로 다시 노래가 됩니다.</p>
+      </div>
+      <div class="card">
+        <h3>그 자체가 기여의 증거입니다</h3>
+        <p>어떤 음을 사람이 골랐고 어디를 고쳤는지, AI가 부른 결과가 악보와 어떻게 달랐는지가 모두 남습니다.
+           앞으로 요구될 제작 기록을 따로 만들 필요 없이, 쓰는 과정에서 쌓입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band dark" id="s3">
+  <div class="wrap">
+    <div class="opener">
+      <div class="measure"><b>03</b><span>엔진 규모</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <h2 style="margin-bottom:38px">한 곡이 나올 수 있는 경우의 수</h2>
+    <span class="huge">10<sup>2,000</sup><sup class="plus">+</sup></span>
+    <div class="against">
+      <span>관측 가능한 우주의 원자 수는 약 <b>10<sup>80</sup></b></span>
+    </div>
+    <p class="lead" style="margin-top:34px">
+      한 곡에 들어가는 음표는 멜로디와 반주를 합쳐 1,500개에서 2,000개입니다.
+      편곡이 두꺼워지면 6,000개를 넘기도 합니다. 그 음표마다 고를 수 있는 길이 열 갈래가 넘습니다.
+      여기에 마디마다 화음을 고르는 수, 구간마다 악기 층을 더하고 빼는 수,
+      가사 엔진이 줄을 짓는 수가 다시 곱해집니다. 같은 곡이 두 번 나올 일이 사실상 없습니다.
+    </p>
+    <p class="note" style="margin-top:24px; color:var(--dark-mut); max-width:62ch">
+      이것은 만들어질 수 있는 조합의 수이지 품질을 보장하는 수치가 아닙니다.
+      엔진이 품질을 지키는 방법은 후보를 여러 개 만들어 점수로 거르고, 부른 결과를 다시 검증하는 구조에 있습니다.
+      세부 방식은 특허 출원 중이라 이 문서에는 적지 않습니다.
+    </p>
+  </div>
+</section>
+
+<section class="band" id="s4">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>04</b><span>경쟁 비교</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>같은 시장에 있지만,<br>내놓는 물건이 다릅니다</h2>
+    </div>
+    <div>
+      <div class="cap">기능 대조표 · 2026년 11월 공개 자료 기준</div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>기능</th><th class="j">JURAN</th><th>Suno</th><th>Udio</th><th>ElevenLabs Music</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>내놓는 결과물</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>악보 + 음원</span></td>
+              <td>음원<span class="sub">스템·MIDI</span></td>
+              <td>음원<span class="sub">스템</span></td>
+              <td>음원</td>
+            </tr>
+            <tr>
+              <td>음표 하나 단위 수정</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>가능</span></td>
+              <td><span class="mk p"><i class="nh p"></i>일부</span><span class="sub">스튜디오 전용, 오선보 아님</span></td>
+              <td><span class="mk p"><i class="nh p"></i>일부</span><span class="sub">스템 단위</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>가사와 음표 1:1 맞춤</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>가능</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>부른 결과를 악보와 대조</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>가능</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>재생하며 악보 따라가기</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>가능</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>MusicXML 악보 파일</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>가능</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>작곡 엔진의 바탕</td>
+              <td class="j">자체 규칙과 통계값<span class="sub">원곡의 음표와 가사는 보관하지 않음</span></td>
+              <td>대규모 학습</td>
+              <td>대규모 학습</td>
+              <td>라이선스 기반</td>
+            </tr>
+            <tr>
+              <td>학습 데이터 분쟁</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>해당 없음</span></td>
+              <td>워너 합의 2025.11<span class="sub">UMG·소니 소송 진행</span></td>
+              <td>UMG·워너·멀린·코발트<span class="sub">합의 완료</span></td>
+              <td>라이선스 계약</td>
+            </tr>
+            <tr>
+              <td>사람 기여 증빙 기록</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>쓰는 동안 쌓임</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:14px">
+        속이 빈 음표 머리는 JURAN이 악보에서 「부르지 않은 음」을 표시할 때 쓰는 기호입니다.
+      </p>
+    </div>
+    <p class="note">
+      각 서비스는 기능을 자주 바꾸므로 실사 시점에 다시 확인해야 합니다.
+      Suno는 2026년 6월 기업가치 54억 달러로 4억 달러를 조달했고, 연 환산 매출은 약 3억 달러로 추정됩니다.
+      시장이 크다는 증거이자, 아직 아무도 악보 쪽을 차지하지 않았다는 증거이기도 합니다.
+    </p>
+  </div>
+</section>
+
+<section class="band tint" id="s5">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>05</b><span>운영비 구조</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>같은 곡을 만들어도,<br>드는 돈이 다릅니다</h2>
+    </div>
+    <p class="lead">
+      기존 AI 음악 서비스는 곡이 하나 나올 때마다 서버에서 거대한 모델을 돌립니다.
+      JURAN은 작곡·편곡·악보를 사용자의 기기에서 계산합니다.
+      서버가 하는 일은 노래를 만들어 달라고 외부에 부탁하는 것과, 돌아온 노래를 검증하는 것뿐입니다.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>비용 항목</th><th>기존 AI 음악 서비스</th><th class="j">JURAN</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>모델 학습과 재학습</td>
+            <td>대규모 학습이 전제입니다. 모델을 바꿀 때마다 다시 듭니다.</td>
+            <td class="j"><span class="mk y"><i class="nh y"></i>없음</span>
+              <span class="sub">작곡·편곡 엔진은 규칙과 수치로 돌아갑니다</span></td>
+          </tr>
+          <tr>
+            <td>곡 하나를 만들 때</td>
+            <td>모든 곡에 추론 비용이 붙습니다.<span class="sub">중개 API 기준 트랙당 약 $0.045~$1.09</span></td>
+            <td class="j"><span class="mk y"><i class="nh y"></i>서버 비용 0</span>
+              <span class="sub">가사·작곡·편곡·악보는 사용자 기기에서 계산</span></td>
+          </tr>
+          <tr>
+            <td>목소리</td>
+            <td>생성에 묶여 있어 따로 뗄 수 없습니다.</td>
+            <td class="j">원할 때만 외부 엔진을 부릅니다.<span class="sub">쓴 만큼만 듭니다</span></td>
+          </tr>
+          <tr>
+            <td>검증</td>
+            <td>기능 자체가 없습니다.</td>
+            <td class="j">곡당 한 번<span class="sub">생성 추론보다 가벼운 계산</span></td>
+          </tr>
+          <tr>
+            <td>저작권 로열티</td>
+            <td>레이블과 합의한 뒤로 결과물마다 로열티가 붙습니다.<span class="sub">요율은 공개되지 않았습니다</span></td>
+            <td class="j"><span class="mk y"><i class="nh y"></i>해당 없음</span></td>
+          </tr>
+          <tr>
+            <td>무료 사용자</td>
+            <td>등록 1억 명 중 유료는 2%입니다. 하루 700만 트랙의 대부분이 비용입니다.</td>
+            <td class="j">서버 부담이 거의 없습니다.<span class="sub">무료 구간은 기기에서 계산</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid2">
+      <div class="card key">
+        <h3>사용자가 늘어도 서버가 커지지 않습니다</h3>
+        <p>기존 구조는 사용자가 두 배가 되면 추론 서버도 두 배가 필요합니다.
+           JURAN에서 늘어나는 비용은 실제로 노래를 만든 횟수뿐입니다.
+           곡을 쓰고, 고치고, 들어 보는 동안에는 서버가 거의 일하지 않습니다.</p>
+      </div>
+      <div class="card key">
+        <h3>부품을 갈아 끼울 수 있습니다</h3>
+        <p>목소리 엔진은 외부 부품입니다. 더 싼 엔진이 나오면 바꿔 끼우면 되고,
+           값이 오르면 다른 곳으로 옮기면 됩니다.
+           모델을 직접 학습해 품고 있는 회사는 그렇게 할 수 없습니다.</p>
+      </div>
+    </div>
+    <div>
+      <div class="cap">자체 서버로 돌린다면 · 곡 수에 따른 연간 서버 비용</div>
+      <p class="lead" style="margin-bottom:22px">
+        위 구조가 돈으로 얼마가 되는지 계산했습니다. 두 쪽 모두 GPU를 직접 빌려 돌린다고 보고,
+        공개된 단가만 써서 맞췄습니다.
+      </p>
+      <div class="assume">
+        <div><b>$0.96</b><span>GPU 1시간<br>L40S 온디맨드</span></div>
+        <div><b>$0.080</b><span>3분 곡 1트랙 생성<br>GPU 5분</span></div>
+        <div><b>$0.008</b><span>1트랙 검증<br>분리·음높이 GPU 30초</span></div>
+        <div><b>$0.015</b><span>저장 1GB·한 달<br>전송료 없는 저장소</span></div>
+      </div>
+      <p class="note" style="margin:14px 0 22px">
+        완성곡 1곡을 얻기까지 <b>다섯 번 고쳐 본다</b>고 보고, 한 번에 후보 2트랙을 받는 것으로 맞췄습니다.
+        음원은 3분 3MB, 1년 보관 기준입니다.
+        기존 방식은 고쳐 보는 다섯 번이 전부 서버에서 돌고, JURAN은 그 다섯 번이 사용자 기기에서 돌아
+        마지막 노래 한 번만 서버를 씁니다.
+      </p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>완성곡 수</th><th class="num">기존 방식</th><th class="num">JURAN</th><th class="gap">차이</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>10만 곡</td><td class="num">$80,527</td><td class="num">$17,705</td>
+              <td class="gap">$62,822<span class="krw">약 8,500만 원</span></td></tr>
+            <tr><td>100만 곡</td><td class="num">$805,273</td><td class="num">$177,055</td>
+              <td class="gap">$628,219<span class="krw">약 8억 5천만 원</span></td></tr>
+            <tr><td>1,000만 곡</td><td class="num">$8,052,734</td><td class="num">$1,770,547</td>
+              <td class="gap">$6,282,188<span class="krw">약 85억 원</span></td></tr>
+            <tr><td>1억 곡</td><td class="num">$80,527,344</td><td class="num">$17,705,469</td>
+              <td class="gap">$62,821,875<span class="krw">약 848억 원</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:12px">
+        완성곡 1곡당 기존 방식 $0.81, JURAN $0.18입니다. 환율은 1,350원으로 잡았습니다.
+      </p>
+    </div>
+
+    <div>
+      <div class="cap">몇 번 고쳐 보느냐에 따라</div>
+      <p class="lead" style="margin-bottom:20px">
+        이 차이는 전부 「고쳐 보는 횟수」에서 나옵니다. 그래서 그 횟수를 바꿔 가며 다시 계산했습니다.
+      </p>
+      <div class="scroll">
+        <table style="min-width:520px">
+          <thead>
+            <tr><th>완성곡 1곡당 고쳐 보는 횟수</th><th class="num">기존 방식</th><th class="num">JURAN</th><th class="gap">배수</th></tr>
+          </thead>
+          <tbody>
+            <tr class="flip"><td>1번 — 한 번에 끝낸다</td><td class="num">$0.16</td><td class="num">$0.18</td>
+              <td class="gap">0.91배</td></tr>
+            <tr><td>5번</td><td class="num">$0.81</td><td class="num">$0.18</td><td class="gap">4.6배</td></tr>
+            <tr><td>10번</td><td class="num">$1.61</td><td class="num">$0.18</td><td class="gap">9.1배</td></tr>
+            <tr><td>20번</td><td class="num">$3.22</td><td class="num">$0.18</td><td class="gap">18.2배</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:12px">
+        첫 줄을 보시면 아시겠지만, 한 번에 끝내는 사용자만 있다면 JURAN이 오히려 9% 비쌉니다. 검증을 한 번 더 돌기 때문입니다.
+        JURAN이 싸지는 이유는 생성이 싸서가 아니라, 고쳐 보는 동안 서버가 쉬기 때문입니다.
+        그리고 곡을 만드는 사람은 거의 모두 여러 번 고쳐 봅니다.
+      </p>
+    </div>
+
+    <div class="grid2">
+      <div class="card key">
+        <h3>표에 넣지 않은 것이 둘 더 있습니다</h3>
+        <p><b>모델 학습비.</b> 기존 서비스는 모델을 만들고 바꿀 때마다 학습 비용이 듭니다.
+           한 번에 드는 큰돈이라 곡당 비용으로 나누기 어려워 뺐습니다.
+           JURAN 작곡 엔진에는 이 항목이 아예 없습니다.</p>
+      </div>
+      <div class="card key">
+        <h3>저작권 로열티</h3>
+        <p>레이블과 합의한 뒤로는 결과물마다 로열티가 붙습니다. 요율이 공개되지 않아 표에 넣지 못했습니다.
+           넣으면 차이는 더 벌어집니다. JURAN 작곡 엔진에는 해당하지 않습니다.</p>
+      </div>
+    </div>
+
+    <p class="note">
+      경쟁사의 실제 원가는 공개돼 있지 않습니다. 위의 트랙당 금액은 중개 API에서 매겨진 값이라 원가가 아니라 시장 가격입니다.
+      비교의 핵심은 금액이 아니라, 어느 쪽에 비용 항목 자체가 없는가입니다.
+      JURAN도 후보를 두 개 받아 더 잘 부른 쪽을 고르므로 목소리 비용은 그만큼 더 듭니다.
+    </p>
+  </div>
+</section>
+
+<section class="band" id="s6">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>06</b><span>두 시장</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>도구 시장은 작고,<br>권리 시장은 큽니다</h2>
+    </div>
+    <p class="lead">
+      AI 음악 생성 도구만 놓고 보면 시장은 아직 10억 달러 안팎입니다.
+      그 옆에 음반 시장 317억 달러가 있습니다. JURAN이 서 있는 자리는 둘을 잇는 다리입니다.
+    </p>
+
+    <div>
+      <div class="cap">시장 규모 · 가장 최근 공개치 · 미국 달러</div>
+      <div class="key2">
+        <span><i style="background:var(--red)"></i>AI 음악</span>
+        <span><i style="background:var(--blue)"></i>기존 권리·음반 시장</span>
+      </div>
+      <div class="chart">
+        <div class="bar" title="9.6억 달러">
+          <div class="hd"><span>생성형 AI 음악 도구 · 2026년</span><b>$0.96B</b></div>
+          <div class="track"><span class="fill r" style="width:3%"></span></div>
+          <span class="by">Grand View Research</span>
+        </div>
+        <div class="bar" title="55.5억 달러">
+          <div class="hd"><span>음악 분야 AI 전체 · 2026년</span><b>$5.55B</b></div>
+          <div class="track"><span class="fill r" style="width:17.5%"></span></div>
+          <span class="by">The Business Research Company</span>
+        </div>
+        <div class="bar" title="317억 달러">
+          <div class="hd"><span>세계 음반 시장 · 2025년</span><b>$31.7B</b></div>
+          <div class="track"><span class="fill b" style="width:100%"></span></div>
+          <span class="by">IFPI</span>
+        </div>
+      </div>
+      <p class="note" style="margin-top:16px">
+        여기에 더해 세계 저작권 징수액이 2025년 €155억입니다(CISAC). 통화가 달라 위 막대에는 넣지 않았습니다.
+      </p>
+    </div>
+
+    <div>
+      <div class="cap">성장 속도</div>
+      <div class="chart">
+        <div class="bar" title="연평균 30.4%">
+          <div class="hd"><span>생성형 AI 음악 도구 · 2024~2030 연평균</span><b>30.4%</b></div>
+          <div class="track"><span class="fill r" style="width:100%"></span></div>
+          <span class="by">Grand View Research</span>
+        </div>
+        <div class="bar" title="전년 대비 11.3%">
+          <div class="hd"><span>세계 저작권 징수 · 2025년 전년 대비</span><b>11.3%</b></div>
+          <div class="track"><span class="fill b" style="width:37%"></span></div>
+          <span class="by">CISAC</span>
+        </div>
+        <div class="bar" title="전년 대비 6.4%">
+          <div class="hd"><span>세계 음반 시장 · 2025년 전년 대비</span><b>6.4%</b></div>
+          <div class="track"><span class="fill b" style="width:21%"></span></div>
+          <span class="by">IFPI</span>
+        </div>
+      </div>
+      <p class="note" style="margin-top:16px">
+        앞의 하나는 6년 평균 전망치, 뒤의 둘은 한 해 실적치입니다. 성격이 달라 같은 잣대로 비교할 수는 없고, 방향만 보시면 됩니다.
+        도구 시장이 빠르게 크고 있고, 권리 시장은 규모가 크면서도 저작권 징수 쪽이 음반 쪽보다 빠르게 늘고 있습니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="band tint" id="s7">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>07</b><span>확장성</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>악보 하나가 열어 주는<br>다음 시장</h2>
+    </div>
+    <p class="lead">
+      음원만 만드는 서비스는 음원 시장에서 끝납니다.
+      JURAN은 중간에 악보가 남기 때문에, 악보를 쓰는 모든 곳으로 갈 수 있습니다.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="when">단기</span>
+        <h3>악보를 쓰는 곳</h3>
+        <p>음악 교육, 연주 연습, 노래 반주, 악보 출판.
+           모두 이미 돈이 도는 시장이고, AI 음원만으로는 들어갈 수 없는 곳입니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">중기</span>
+        <h3>증빙 인프라</h3>
+        <p>검증 기록을 신탁 등록과 분쟁의 증거로 쓰는 B2B.
+           협회, 레이블, 유통사가 고객이 됩니다. 기준이 세워질수록 수요가 커집니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">장기</span>
+        <h3>엔진 재사용</h3>
+        <p>JURAN은 자체 엔진 위에 올린 단일 앱 하나입니다.
+           같은 엔진으로 다른 앱을 계속 파생시킬 수 있는 구조가 이미 검증돼 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="cap" style="margin-top:12px; margin-bottom:0">선점이 굳어지는 조건</div>
+    <div class="grid2">
+      <div class="card key"><h3>01 — 특허</h3>
+        <p>가사 기반 작곡과 노래 검증을 잇는 폐쇄 루프 구조로 PCT 국제출원 명세서를 완성했습니다.
+           청구항 16개, 도면 10장입니다.</p></div>
+      <div class="card key"><h3>02 — 소송 위험이 없는 엔진</h3>
+        <p>작곡 엔진은 음원을 학습하지 않습니다. 쓰는 것은 빠르기, 음 길이의 분포, 순차 진행의 비율,
+           쉼의 비율 같은 통계 특성값뿐이고, 원곡의 음표와 가사는 보관하지 않습니다.
+           경쟁사가 합의와 소송을 안고 가는 동안 JURAN에는 그 비용이 없습니다.
+           목소리 엔진은 외부 부품이라 언제든 교체할 수 있습니다.</p></div>
+      <div class="card key"><h3>03 — 쌓이는 검증 데이터</h3>
+        <p>곡을 만들수록 어떤 악보가 잘 불리는지가 쌓입니다.
+           이 데이터는 뒤에 온 경쟁자가 돈으로 살 수 없습니다.</p></div>
+      <div class="card key"><h3>04 — 규제 적합성</h3>
+        <p>기준이 엄격해질수록 JURAN이 유리해집니다.
+           규제가 경쟁사에게는 비용이지만 JURAN에게는 진입 장벽이 됩니다.</p></div>
+    </div>
+    <p class="note">
+      독점을 약속드리는 것은 아닙니다. 위 네 가지가 함께 유지되고 기준 정비가 예상대로 진행될 때
+      선점 효과가 커지는 구조라는 뜻입니다. 큰 회사가 악보 쪽으로 방향을 틀 가능성은 늘 있습니다.
+    </p>
+  </div>
+</section>
+
+<section class="band" id="s8">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>08</b><span>제안</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>지금 상태와 필요한 것</h2>
+    </div>
+    <div class="grid3">
+      <div class="card"><h3>작동하는 제품</h3>
+        <p>가사 입력부터 악보·편곡·노래·검증까지 전 과정이 실제로 돌아갑니다.</p></div>
+      <div class="card"><h3>자체 엔진</h3>
+        <p>작곡·편곡·검증 엔진을 직접 보유합니다. 외부 라이선스에 묶인 부분이 없습니다.</p></div>
+      <div class="card"><h3>출원 준비 완료</h3>
+        <p>PCT 국제출원 명세서가 완성돼 제출 단계에 있습니다.</p></div>
+    </div>
+    <div class="card">
+      <div class="cap" style="margin-bottom:4px">투자금이 쓰일 곳</div>
+      <div class="useit">
+        <div><span>특허 출원과 해외 국내단계 진입</span><em>권리 확보</em></div>
+        <div><span>목소리 엔진 상용 계약과 서버 증설</span><em>서비스 개시</em></div>
+        <div><span>악보·교육 쪽 B2B 영업</span><em>매출 경로</em></div>
+        <div><span>개발 인력 충원</span><em>속도</em></div>
+      </div>
+      <p class="note" style="margin-top:16px">
+        운영비 구조상 사용자가 늘어도 서버 비용이 같이 늘지 않습니다.
+        투자금은 돌아가는 비용이 아니라 위 네 가지에 들어갑니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="band tint">
+  <div class="wrap">
+    <div class="staff" style="margin-bottom:24px"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="cap">출처</div>
+    <div class="srcs">
+      <span>IFPI 세계 음악 보고서 2026 · <a href="https://www.musicbusinessworldwide.com/global-recorded-music-revenues-hit-31-7bn-in-2025-up-6-4-yoy-users-of-paid-music-subscriptions-reach-837m/">Music Business Worldwide</a></span>
+      <span>CISAC 세계 징수 보고서 2026 · <a href="https://www.aimusicpreneur.com/ai-music-news/cisac-global-collections-report-2026-record-royalties-ai-largest-test/">AI Musicpreneur</a></span>
+      <span>생성형 AI 음악 시장 전망 · <a href="https://www.grandviewresearch.com/industry-analysis/generative-ai-in-music-market-report">Grand View Research</a></span>
+      <span>Suno 기업가치·매출·소송 · <a href="https://valueaddvc.com/blog/suno-ai-valuation-2026-5-4b-round-300m-arr-and-the-business-model-behind-ai-music">ValueAdd VC</a></span>
+      <span>AI 음악 API 트랙당 단가 2026 · <a href="https://apiframe.ai/blog/ai-music-api-pricing-2026">Apiframe</a></span>
+      <span>레이블 라이선스 계약 현황 · <a href="https://www.chartlex.com/blog/business/ai-music-licensing-deals-tracker-2026">Chartlex</a></span>
+      <span>음악 생성 모델 GPU 시간·비용 · <a href="https://www.spheron.network/blog/deploy-open-source-ai-music-generation-gpu-cloud-2026/">Spheron</a></span>
+      <span>클라우드 GPU 시간당 단가 · <a href="https://www.cloudzero.com/blog/cloud-gpu-pricing-comparison/">CloudZero</a></span>
+      <span>오브젝트 저장소 단가 비교 · <a href="https://www.kunalganglani.com/blog/cloudflare-r2-vs-aws-s3">R2 vs S3</a></span>
+      <span>음저협 AI 음악 기준 발표 2026.08.04 · <a href="https://www.mt.co.kr/culture/2026/08/04/2026080413530953196">머니투데이</a></span>
+      <span>음저협 기준 철회 2026.08.25 · <a href="https://view.asiae.co.kr/article/2026083116360854659">아시아경제</a></span>
+      <span>국회 토론회 제작 기록 논의 2026.09.22 · <a href="https://news.mtn.co.kr/news-detail/2026092215554461216">머니투데이방송</a></span>
+    </div>
+    <p class="note" style="margin-top:24px">
+      2026년 11월 작성. 시장 수치는 조사기관마다 집계 범위가 달라 차이가 있습니다.
+      이 문서는 투자 권유를 위한 요약 자료이며, 법률·회계 검토를 대신하지 않습니다.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  var secs = links.map(function(a){ return document.getElementById(a.getAttribute('href').slice(1)); });
+  function mark(){
+    var y = window.scrollY + 110, hit = -1;
+    secs.forEach(function(s,i){ if(s && s.offsetTop <= y) hit = i; });
+    links.forEach(function(a,i){ a.classList.toggle('on', i === hit); });
+  }
+  var tick = false;
+  window.addEventListener('scroll', function(){
+    if(tick) return; tick = true;
+    requestAnimationFrame(function(){ mark(); tick = false; });
+  }, {passive:true});
+  mark();
+
+  // 표가 화면보다 넓을 때만 옆으로 미는 안내를 붙인다
+  function hints(){
+    Array.prototype.forEach.call(document.querySelectorAll('.scroll'), function(s){
+      var h = s.nextElementSibling;
+      if(!h || h.className !== 'hint'){
+        h = document.createElement('p');
+        h.className = 'hint';
+        h.textContent = '→ 표를 옆으로 밀면 나머지 칸이 보입니다';
+        s.parentNode.insertBefore(h, s.nextSibling);
+      }
+      h.hidden = s.scrollWidth <= s.clientWidth + 4;
+    });
+  }
+  hints();
+  window.addEventListener('resize', hints);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(hints);
+})();
+</script>
+
+</body>
+</html>
