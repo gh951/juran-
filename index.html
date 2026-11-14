@@ -261,6 +261,20 @@ footer .wrap{padding-block:48px}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important; transition:none!important}}
 html{scroll-behavior:smooth}
 section[id]{scroll-margin-top:64px}
+/* 11-14 : 검사증 견본 그림 */
+.shots{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start}
+.shot{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:6px; overflow:hidden}
+.shot img{display:block; width:100%; height:auto}
+.shot figcaption{font:13px/1.55 var(--sans); color:var(--muted); padding:10px 14px}
+@media (max-width:720px){ .shots{grid-template-columns:1fr} }
+.band .kpis{margin-top:4px}
+.kpis.k4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:720px){ .kpis.k4{grid-template-columns:1fr 1fr} }
+/* 11-14 : 어두운 띠(09 경매) 안의 흰 카드 — 글자를 밝은 면 색으로 */
+.band.dark .card{color:var(--ink-2)}
+.band.dark .card h3, .band.dark .useit span{color:var(--ink)}
+.band.dark .card.key h3{color:var(--red)}
+.band.dark .card .note{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -269,16 +283,16 @@ section[id]{scroll-margin-top:64px}
 <nav>
   <div class="navin">
     <span class="brand">JURAN</span>
-    <a href="#s1">01 빈자리</a><a href="#s2">02 구조</a><a href="#s3">03 규모</a>
-    <a href="#s4">04 비교</a><a href="#s5">05 운영비</a><a href="#s6">06 시장</a>
-    <a href="#s7">07 확장</a><a href="#s8">08 제안</a>
+    <a href="#s1">01 빈자리</a><a href="#sA">02 경매</a><a href="#sB">03 검사증</a>
+    <a href="#s6">04 시장</a><a href="#s2">05 구조</a><a href="#s3">06 규모</a>
+    <a href="#s4">07 비교</a><a href="#s5">08 운영비</a><a href="#s7">09 확장</a><a href="#s8">10 제안</a>
     <a class="live" href="https://juranaimusic.com">juranaimusic.com ↗</a>
   </div>
 </nav>
 
 <header class="hero band">
   <div class="wrap">
-    <div class="tag">투자 제안 · 2026</div>
+    <div class="tag">투자 제안 · 2026 · 11월 14일 고침</div>
     <div class="keystone">
       <p>JURAN 엔진은 작곡과 작사에서 <em>저작권을 푸는 열쇠</em>입니다.</p>
       <span>음원을 학습하지 않습니다. 사람의 기여가 기록으로 남습니다.
@@ -296,6 +310,7 @@ section[id]{scroll-margin-top:64px}
       JURAN은 가사에서 악보를 만들고, 노래가 그 악보대로 불렸는지를 음표 하나 단위로 되짚어 봅니다.
       그 과정이 그대로 남아 사람이 무엇을 만들었는지 보여 주는 기록이 됩니다.
       지금 전 세계 음악 산업이 찾고 있는 것이 바로 그 기록입니다.
+      그리고 JURAN은 그 기록을 붙여, 아무도 열지 못한 <b>AI 곡 권리 경매</b>를 엽니다.
     </p>
     <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="kpis">
@@ -347,10 +362,215 @@ section[id]{scroll-margin-top:64px}
   </div>
 </section>
 
+<section class="band dark" id="sA">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>02</b><span>AI 음악 경매</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>모두가 겁내는 자리,<br>AI 곡을 권리째 경매합니다</h2>
+    </div>
+    <p class="lead">
+      AI 곡은 하루에도 수만 곡씩 쏟아지지만, 그 곡을 권리째 사고파는 경매는
+      저희가 찾아본 범위에서 아직 아무도 열지 못했습니다. 기술이 없어서가 아니라 겁이 나서입니다.
+      팔 권리가 없고, 베끼지 않았다고 보증할 수 없고, 파일이 진짜인지 확인할 길이 없기 때문입니다.
+      JURAN은 이 세 가지에 각각 답하는 기록을 곡을 만드는 순간부터 남깁니다. 그래서 경매를 열 수 있습니다.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="when">겁 ① — 팔 권리가 없다</span>
+        <h3>AI만 만든 곡은 저작권이 없습니다</h3>
+        <p>미국 저작권청과 한국저작권위원회 모두 AI만으로 만든 결과물은 저작물로 보지 않습니다.
+           2026년 3월 빌보드 컨트리 디지털 판매 1위에 오른 AI 곡도 등록할 수 없어,
+           독점을 주장하거나 침해 배상을 받을 수 없습니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">겁 ② — 보증할 수 없다</span>
+        <h3>베끼지 않았다는 증거가 없습니다</h3>
+        <p>기존 곡을 대량으로 학습한 생성기는 학습 데이터 소송을 안고 있습니다.
+           판 곡이 기존 곡과 닮았다는 말이 나오면, 판 사람은 「따라 하지 않았다」를 증명할 방법이 없습니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">겁 ③ — 확인할 수 없다</span>
+        <h3>파일이 진짜인지 모릅니다</h3>
+        <p>음원 파일 하나만으로는 어느 것이 원본이고, 누가 어디를 고쳤는지, 중간에 바뀌지 않았는지 알 수 없습니다.</p>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="card key">
+        <span class="when">JURAN의 답 ①</span>
+        <h3>사람이 고친 곳이 기록됩니다</h3>
+        <p>출품하려면 가사 4줄 · 곡 4마디 이상을 사람이 직접 고쳐야 하고, 서버가 원래 가사와 견줘 고친 줄 수를 셉니다.
+           고친 음표와 가사는 빨간색으로 남아, 사람이 만든 부분이 권리가 됩니다.</p>
+      </div>
+      <div class="card key">
+        <span class="when">JURAN의 답 ②</span>
+        <h3>경우의 수와 공개 곡 대조</h3>
+        <p>엔진이 굴린 추첨과 원본 시드가 남아, 같은 기록으로 다시 돌리면 같은 곡이 나옵니다(따라 하지 않았다는 증거).
+           최종본은 공개 곡 21,970곡과 맞대어 닮지 않았는지 따로 확인합니다.</p>
+      </div>
+      <div class="card key">
+        <span class="when">JURAN의 답 ③</span>
+        <h3>원본 · 고친본에 도장</h3>
+        <p>엔진이 지은 원본과 사람이 고친 고친본이 각각 PDF로 나오고, 서버가 파일 지문에 도장 번호를 찍습니다.
+           한 글자, 한 음만 바뀌어도 도장이 맞지 않습니다.</p>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="card">
+        <span class="when">출품</span>
+        <h3>원본과 고친본을 함께</h3>
+        <p>JURAN 엔진 곡은 물론 다른 AI로 만든 곡도 출품할 수 있습니다. 다른 AI 곡은 경우의 수 보증 없이 대조와 확인서만 붙습니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">심사</span>
+        <h3>도장과 대조를 확인</h3>
+        <p>도장이 서버 기록과 맞는지, 최종본이 공개 곡과 닮지 않았는지 본 뒤 10자리 경매 카드에 올립니다.
+           관심 있는 사람은 두 PDF를 내려받아 직접 비교합니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">낙찰</span>
+        <h3>정식 보증서</h3>
+        <p>낙찰자는 원본 · 생성 기록 · 계약상 독점 · 사람이 고친 부분의 권리를 받고,
+           비공개였던 정확한 경우의 수와 생성 로그가 적힌 정식 보증서를 받습니다.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="cap" style="margin-bottom:4px">수익 구조 · 경매 규정 기본값</div>
+      <div class="useit">
+        <div><span>출품비</span><em>3,000원 · 거절되면 환불</em></div>
+        <div><span>낙찰 수수료</span><em>JURAN 곡 10% · 다른 AI 곡 5%</em></div>
+        <div><span>재판매 로열티</span><em>5% · 계약으로 이어짐</em></div>
+        <div><span>배상 한도</span><em>낙찰가의 3배</em></div>
+      </div>
+      <p class="note" style="margin-top:16px">
+        곡을 만드는 값이 아니라 곡이 거래되는 값에서 수수료와 로열티가 나옵니다.
+        다른 AI 곡까지 받아 증빙을 붙이므로, 경쟁사 사용자도 JURAN 경매의 고객이 됩니다.
+      </p>
+    </div>
+    <p class="note" style="color:var(--dark-mut)">
+      지금은 1단계입니다. 출품 · 심사 · 보증서 · 카드별 채팅이 앱에서 돌아가고, 실제 입찰과 결제는 본인 확인 · 결제 대행 · 약관을 갖춘 뒤 엽니다.
+      규정은 법률 검토 전 초안입니다.
+    </p>
+  </div>
+</section>
+
+<section class="band" id="sB">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>03</b><span>JURAN 검사증</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>한 장에 담긴 증거,<br>저작권 0%의 원리</h2>
+    </div>
+    <p class="lead">
+      표절 다툼은 두 가지를 묻습니다. 기존 곡을 보고 따라 했는가(의거성), 그리고 결과가 실제로 닮았는가(실질적 유사성).
+      JURAN 검사증은 이 둘에 따로따로 답하고, 사람이 고친 곳과 도장 번호까지 한 장의 PDF에 담습니다.
+      경매에 오르는 모든 곡에 이 검사증이 붙습니다.
+    </p>
+    <div class="shots">
+      <figure class="shot"><a href="cert-sample-1.jpg" target="_blank" rel="noopener"><img src="cert-sample-1.jpg" alt="JURAN 검사증 견본 — 저작권 0%의 원리 상자" loading="lazy"></a>
+        <figcaption>위 — 엔진이 경우의 수의 추첨으로 지었다는 기록, 사람이 고친 곳, 도장</figcaption></figure>
+      <figure class="shot"><a href="cert-sample-2.jpg" target="_blank" rel="noopener"><img src="cert-sample-2.jpg" alt="JURAN 검사증 견본 — 공개 곡 대조 그래프와 악보 겹쳐 보기" loading="lazy"></a>
+        <figcaption>아래 — 공개 곡 21,970곡과 대조: 가장 가까운 5곡 · 같은 구간 · 악보 겹쳐 보기</figcaption></figure>
+    </div>
+    <div class="grid2">
+      <div class="card key"><span class="when">의거성</span><h3>① 경우의 수 기록</h3>
+        <p>가사와 가락은 우주의 원자 수(10<sup>80</sup>)보다 천 자리 넘게 큰 경우의 수의 추첨으로 완성됩니다.
+           분쟁이 나면 원본 시드와 단계별 연산 기록을 증거로 내어 「기존 곡을 모방하지 않았다」는 것을 수학으로 보입니다.</p></div>
+      <div class="card key"><span class="when">실질적 유사성</span><h3>② 공개 곡 대조</h3>
+        <p>최종본 가락을 공개 곡 21,970곡(편곡 32,137개)과, 가사는 금지어 · 실존 인물 이름과 맞대어 봅니다.</p></div>
+      <div class="card"><span class="when">사람의 기여</span><h3>③ 사람이 고친 곳</h3>
+        <p>각국 기준이 저작권을 인정하는 「사람이 창작적으로 고친 부분」을 마디 · 줄 수로 적고, 고친본 PDF에 빨갛게 표시합니다.</p></div>
+      <div class="card"><span class="when">위변조</span><h3>④ JURAN 도장</h3>
+        <p>원본 · 고친본 PDF마다 도장 번호가 찍히고, 누구나 앱에서 파일을 올려 진짜인지 바로 확인할 수 있습니다.</p></div>
+    </div>
+    <p class="note">
+      위 그림은 시험용 가락으로 뽑은 검사증 견본입니다. 정확한 자릿수와 추첨 횟수는 가려져 있고,
+      낙찰자에게 발급하는 정식 보증서와 법적 분쟁에서만 공개합니다. 대조는 대조 자료 범위 안의 결과이며 법적 판단을 대신하지 않습니다.
+    </p>
+  </div>
+</section>
+
+<section class="band" id="s6">
+  <div class="wrap stack">
+    <div class="opener">
+      <div class="measure"><b>04</b><span>두 시장</span></div>
+      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>도구 시장은 작고,<br>권리 시장은 큽니다</h2>
+    </div>
+    <p class="lead">
+      권리는 이미 큰돈에 사고팔립니다. 다만 지금 이 시장에서 거래되는 것은 사람이 만든 기존 곡뿐입니다.
+      AI 곡은 팔 권리가 없어 문 앞에서 멈춰 있습니다. JURAN 경매는 그 문을 엽니다.
+    </p>
+    <div class="kpis k4">
+      <div class="kpi"><b>$13B</b><span>2025년 음악 카탈로그 가치 평가 566건<br>2024년 $10.7B · Citrin Cooperman</span></div>
+      <div class="kpi"><b>$20.4B+</b><span>2019년 이후 음악 권리 인수 총액<br>WIPO</span></div>
+      <div class="kpi"><b>$84M+</b><span>Royalty Exchange 누적 1,000건 거래<br>그중 70%가 경매</span></div>
+      <div class="kpi"><b>12~17배</b><span>연 로열티 대비 카탈로그 거래 배수<br>오래된 곡일수록 높음</span></div>
+    </div>
+    <p class="lead">
+      AI 음악 생성 도구만 놓고 보면 시장은 아직 10억 달러 안팎입니다.
+      그 옆에 음반 시장 317억 달러가 있습니다. JURAN이 서 있는 자리는 둘을 잇는 다리입니다.
+    </p>
+
+    <div>
+      <div class="cap">시장 규모 · 가장 최근 공개치 · 미국 달러</div>
+      <div class="key2">
+        <span><i style="background:var(--red)"></i>AI 음악</span>
+        <span><i style="background:var(--blue)"></i>기존 권리·음반 시장</span>
+      </div>
+      <div class="chart">
+        <div class="bar" title="9.6억 달러">
+          <div class="hd"><span>생성형 AI 음악 도구 · 2026년</span><b>$0.96B</b></div>
+          <div class="track"><span class="fill r" style="width:3%"></span></div>
+          <span class="by">Grand View Research</span>
+        </div>
+        <div class="bar" title="55.5억 달러">
+          <div class="hd"><span>음악 분야 AI 전체 · 2026년</span><b>$5.55B</b></div>
+          <div class="track"><span class="fill r" style="width:17.5%"></span></div>
+          <span class="by">The Business Research Company</span>
+        </div>
+        <div class="bar" title="317억 달러">
+          <div class="hd"><span>세계 음반 시장 · 2025년</span><b>$31.7B</b></div>
+          <div class="track"><span class="fill b" style="width:100%"></span></div>
+          <span class="by">IFPI</span>
+        </div>
+      </div>
+      <p class="note" style="margin-top:16px">
+        여기에 더해 세계 저작권 징수액이 2025년 €155억입니다(CISAC). 통화가 달라 위 막대에는 넣지 않았습니다.
+      </p>
+    </div>
+
+    <div>
+      <div class="cap">성장 속도</div>
+      <div class="chart">
+        <div class="bar" title="연평균 30.4%">
+          <div class="hd"><span>생성형 AI 음악 도구 · 2024~2030 연평균</span><b>30.4%</b></div>
+          <div class="track"><span class="fill r" style="width:100%"></span></div>
+          <span class="by">Grand View Research</span>
+        </div>
+        <div class="bar" title="전년 대비 11.3%">
+          <div class="hd"><span>세계 저작권 징수 · 2025년 전년 대비</span><b>11.3%</b></div>
+          <div class="track"><span class="fill b" style="width:37%"></span></div>
+          <span class="by">CISAC</span>
+        </div>
+        <div class="bar" title="전년 대비 6.4%">
+          <div class="hd"><span>세계 음반 시장 · 2025년 전년 대비</span><b>6.4%</b></div>
+          <div class="track"><span class="fill b" style="width:21%"></span></div>
+          <span class="by">IFPI</span>
+        </div>
+      </div>
+      <p class="note" style="margin-top:16px">
+        앞의 하나는 6년 평균 전망치, 뒤의 둘은 한 해 실적치입니다. 성격이 달라 같은 잣대로 비교할 수는 없고, 방향만 보시면 됩니다.
+        도구 시장이 빠르게 크고 있고, 권리 시장은 규모가 크면서도 저작권 징수 쪽이 음반 쪽보다 빠르게 늘고 있습니다.
+      </p>
+    </div>
+  </div>
+</section>
+
 <section class="band tint" id="s2">
   <div class="wrap stack">
     <div class="opener">
-      <div class="measure"><b>02</b><span>JURAN의 구조</span></div>
+      <div class="measure"><b>05</b><span>JURAN의 구조</span></div>
       <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
       <h2>한 바퀴가 닫혀 있습니다</h2>
     </div>
@@ -400,7 +620,7 @@ section[id]{scroll-margin-top:64px}
 <section class="band dark" id="s3">
   <div class="wrap">
     <div class="opener">
-      <div class="measure"><b>03</b><span>엔진 규모</span></div>
+      <div class="measure"><b>06</b><span>엔진 규모</span></div>
       <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
     </div>
     <h2 style="margin-bottom:38px">한 곡이 나올 수 있는 경우의 수</h2>
@@ -414,6 +634,12 @@ section[id]{scroll-margin-top:64px}
       여기에 마디마다 화음을 고르는 수, 구간마다 악기 층을 더하고 빼는 수,
       가사 엔진이 줄을 짓는 수가 다시 곱해집니다. 같은 곡이 두 번 나올 일이 사실상 없습니다.
     </p>
+    <p class="lead" style="margin-top:18px">
+      이 수는 어림이 아닙니다. 지금은 곡마다 엔진이 실제로 굴린 추첨을 하나하나 세어,
+      그 가짓수를 모두 곱한 값을 생성 기록과 함께 남깁니다. 한 예시 곡에서는 가사가 수백 번, 가락이 천 번 넘는 추첨을 거쳤고,
+      가사와 가락이 저마다 우주의 원자 수의 10<sup>1,000</sup>배를 넘는 경우의 수에서 나왔습니다.
+      같은 생성 기록으로 다시 돌리면 글자 하나, 음 하나까지 같은 결과가 나옵니다.
+    </p>
     <p class="note" style="margin-top:24px; color:var(--dark-mut); max-width:62ch">
       이것은 만들어질 수 있는 조합의 수이지 품질을 보장하는 수치가 아닙니다.
       엔진이 품질을 지키는 방법은 후보를 여러 개 만들어 점수로 거르고, 부른 결과를 다시 검증하는 구조에 있습니다.
@@ -425,7 +651,7 @@ section[id]{scroll-margin-top:64px}
 <section class="band" id="s4">
   <div class="wrap stack">
     <div class="opener">
-      <div class="measure"><b>04</b><span>경쟁 비교</span></div>
+      <div class="measure"><b>07</b><span>경쟁 비교</span></div>
       <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
       <h2>같은 시장에 있지만,<br>내놓는 물건이 다릅니다</h2>
     </div>
@@ -500,6 +726,34 @@ section[id]{scroll-margin-top:64px}
               <td><span class="mk n"><i class="nh n"></i>없음</span></td>
               <td><span class="mk n"><i class="nh n"></i>없음</span></td>
             </tr>
+            <tr>
+              <td>곡마다 경우의 수 기록 · 재현</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>가능</span><span class="sub">같은 기록 → 같은 곡</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>공개 곡 대조 검사증</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>가능</span><span class="sub">공개 곡 21,970곡</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>원본 · 고친본 위변조 확인</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>도장 PDF</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
+            <tr>
+              <td>AI 곡 권리 경매</td>
+              <td class="j"><span class="mk y"><i class="nh y"></i>1단계 운영</span><span class="sub">출품 · 심사 · 보증서</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+              <td><span class="mk n"><i class="nh n"></i>없음</span></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -518,7 +772,7 @@ section[id]{scroll-margin-top:64px}
 <section class="band tint" id="s5">
   <div class="wrap stack">
     <div class="opener">
-      <div class="measure"><b>05</b><span>운영비 구조</span></div>
+      <div class="measure"><b>08</b><span>운영비 구조</span></div>
       <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
       <h2>같은 곡을 만들어도,<br>드는 돈이 다릅니다</h2>
     </div>
@@ -670,77 +924,10 @@ section[id]{scroll-margin-top:64px}
   </div>
 </section>
 
-<section class="band" id="s6">
-  <div class="wrap stack">
-    <div class="opener">
-      <div class="measure"><b>06</b><span>두 시장</span></div>
-      <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
-      <h2>도구 시장은 작고,<br>권리 시장은 큽니다</h2>
-    </div>
-    <p class="lead">
-      AI 음악 생성 도구만 놓고 보면 시장은 아직 10억 달러 안팎입니다.
-      그 옆에 음반 시장 317억 달러가 있습니다. JURAN이 서 있는 자리는 둘을 잇는 다리입니다.
-    </p>
-
-    <div>
-      <div class="cap">시장 규모 · 가장 최근 공개치 · 미국 달러</div>
-      <div class="key2">
-        <span><i style="background:var(--red)"></i>AI 음악</span>
-        <span><i style="background:var(--blue)"></i>기존 권리·음반 시장</span>
-      </div>
-      <div class="chart">
-        <div class="bar" title="9.6억 달러">
-          <div class="hd"><span>생성형 AI 음악 도구 · 2026년</span><b>$0.96B</b></div>
-          <div class="track"><span class="fill r" style="width:3%"></span></div>
-          <span class="by">Grand View Research</span>
-        </div>
-        <div class="bar" title="55.5억 달러">
-          <div class="hd"><span>음악 분야 AI 전체 · 2026년</span><b>$5.55B</b></div>
-          <div class="track"><span class="fill r" style="width:17.5%"></span></div>
-          <span class="by">The Business Research Company</span>
-        </div>
-        <div class="bar" title="317억 달러">
-          <div class="hd"><span>세계 음반 시장 · 2025년</span><b>$31.7B</b></div>
-          <div class="track"><span class="fill b" style="width:100%"></span></div>
-          <span class="by">IFPI</span>
-        </div>
-      </div>
-      <p class="note" style="margin-top:16px">
-        여기에 더해 세계 저작권 징수액이 2025년 €155억입니다(CISAC). 통화가 달라 위 막대에는 넣지 않았습니다.
-      </p>
-    </div>
-
-    <div>
-      <div class="cap">성장 속도</div>
-      <div class="chart">
-        <div class="bar" title="연평균 30.4%">
-          <div class="hd"><span>생성형 AI 음악 도구 · 2024~2030 연평균</span><b>30.4%</b></div>
-          <div class="track"><span class="fill r" style="width:100%"></span></div>
-          <span class="by">Grand View Research</span>
-        </div>
-        <div class="bar" title="전년 대비 11.3%">
-          <div class="hd"><span>세계 저작권 징수 · 2025년 전년 대비</span><b>11.3%</b></div>
-          <div class="track"><span class="fill b" style="width:37%"></span></div>
-          <span class="by">CISAC</span>
-        </div>
-        <div class="bar" title="전년 대비 6.4%">
-          <div class="hd"><span>세계 음반 시장 · 2025년 전년 대비</span><b>6.4%</b></div>
-          <div class="track"><span class="fill b" style="width:21%"></span></div>
-          <span class="by">IFPI</span>
-        </div>
-      </div>
-      <p class="note" style="margin-top:16px">
-        앞의 하나는 6년 평균 전망치, 뒤의 둘은 한 해 실적치입니다. 성격이 달라 같은 잣대로 비교할 수는 없고, 방향만 보시면 됩니다.
-        도구 시장이 빠르게 크고 있고, 권리 시장은 규모가 크면서도 저작권 징수 쪽이 음반 쪽보다 빠르게 늘고 있습니다.
-      </p>
-    </div>
-  </div>
-</section>
-
 <section class="band tint" id="s7">
   <div class="wrap stack">
     <div class="opener">
-      <div class="measure"><b>07</b><span>확장성</span></div>
+      <div class="measure"><b>09</b><span>확장성</span></div>
       <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
       <h2>악보 하나가 열어 주는<br>다음 시장</h2>
     </div>
@@ -748,7 +935,7 @@ section[id]{scroll-margin-top:64px}
       음원만 만드는 서비스는 음원 시장에서 끝납니다.
       JURAN은 중간에 악보가 남기 때문에, 악보를 쓰는 모든 곳으로 갈 수 있습니다.
     </p>
-    <div class="grid3">
+    <div class="grid2">
       <div class="card">
         <span class="when">단기</span>
         <h3>악보를 쓰는 곳</h3>
@@ -760,6 +947,13 @@ section[id]{scroll-margin-top:64px}
         <h3>증빙 인프라</h3>
         <p>검증 기록을 신탁 등록과 분쟁의 증거로 쓰는 B2B.
            협회, 레이블, 유통사가 고객이 됩니다. 기준이 세워질수록 수요가 커집니다.</p>
+      </div>
+      <div class="card">
+        <span class="when">지금</span>
+        <h3>사진과 명화로 짓는 가사</h3>
+        <p>사진 한 장, 또는 공공 미술관의 퍼블릭 도메인(CC0) 명화를 고르면
+           그림의 색과 흐름을 읽어 가사를 짓습니다. 그림을 베끼지 않고 흐름만 가져와,
+           영감이 된 그림의 출처가 원본 PDF에 함께 적힙니다.</p>
       </div>
       <div class="card">
         <span class="when">장기</span>
@@ -796,13 +990,14 @@ section[id]{scroll-margin-top:64px}
 <section class="band" id="s8">
   <div class="wrap stack">
     <div class="opener">
-      <div class="measure"><b>08</b><span>제안</span></div>
+      <div class="measure"><b>10</b><span>제안</span></div>
       <div class="staff"><i></i><i></i><i></i><i></i><i></i></div>
       <h2>지금 상태와 필요한 것</h2>
     </div>
     <div class="grid3">
       <div class="card"><h3>작동하는 제품</h3>
-        <p>가사 입력부터 악보·편곡·노래·검증까지 전 과정이 실제로 돌아갑니다.</p></div>
+        <p>가사 입력부터 악보·편곡·노래·검증, 그리고 검사증 · 도장 · 경매(1단계)까지 전 과정이 실제로 돌아갑니다.
+           앱은 30개 언어로 쓸 수 있습니다.</p></div>
       <div class="card"><h3>자체 엔진</h3>
         <p>작곡·편곡·검증 엔진을 직접 보유합니다. 외부 라이선스에 묶인 부분이 없습니다.</p></div>
       <div class="card"><h3>출원 준비 완료</h3>
@@ -814,6 +1009,7 @@ section[id]{scroll-margin-top:64px}
         <div><span>특허 출원과 해외 국내단계 진입</span><em>권리 확보</em></div>
         <div><span>목소리 엔진 상용 계약과 서버 증설</span><em>서비스 개시</em></div>
         <div><span>악보·교육 쪽 B2B 영업</span><em>매출 경로</em></div>
+        <div><span>경매 실거래 — 본인 확인 · 결제 대행 · 약관 · 법률 검토</span><em>권리 시장 수익</em></div>
         <div><span>개발 인력 충원</span><em>속도</em></div>
       </div>
       <p class="note" style="margin-top:16px">
@@ -841,9 +1037,18 @@ section[id]{scroll-margin-top:64px}
       <span>음저협 AI 음악 기준 발표 2026.08.04 · <a href="https://www.mt.co.kr/culture/2026/08/04/2026080413530953196">머니투데이</a></span>
       <span>음저협 기준 철회 2026.08.25 · <a href="https://view.asiae.co.kr/article/2026083116360854659">아시아경제</a></span>
       <span>국회 토론회 제작 기록 논의 2026.09.22 · <a href="https://news.mtn.co.kr/news-detail/2026092215554461216">머니투데이방송</a></span>
+      <span>미국 저작권청 「Copyright and Artificial Intelligence Part 2」 2025.01 · <a href="https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf">copyright.gov</a></span>
+      <span>생성형 AI 활용 저작물 등록 · 분쟁 예방 안내서 · <a href="https://www.lawtimes.co.kr/news/articleView.html?idxno=209882">법률신문</a></span>
+      <span>공개 곡 대조 자료 Lakh MIDI Dataset (CC-BY 4.0) · <a href="https://colinraffel.com/projects/lmd/">Colin Raffel</a></span>
+      <span>2025 음악 카탈로그 가치 평가 $13B · <a href="https://www.citrincooperman.com/In-Focus-Resource-Center/2025-Music-Catalog-Valuations-Top-13-Billion">Citrin Cooperman</a></span>
+      <span>음악 권리 투자 $20.4B · <a href="https://www.wipo.int/en/web/economics/w/blogs/the-rise-of-music-investment">WIPO</a></span>
+      <span>Royalty Exchange 1,000건 · $84M · <a href="https://royaltyexchange.com/blog/royalty-exchange-passes-1-000-marketplace-transactions">Royalty Exchange</a></span>
+      <span>AI 곡 빌보드 1위와 저작권 · <a href="https://www.klemchuk.com/ideate/ai-generated-country-song">Klemchuk</a></span>
+      <span>AI 음악 저작권 3년 정리 · <a href="https://www.reedsmith.com/articles/entertainment-media-guide-to-ai-three-years-on/music-part-2-copyright-nil/">Reed Smith</a></span>
+      <span>퍼블릭 도메인 명화 · <a href="https://www.metmuseum.org/hubs/open-access">The Met Open Access</a> · <a href="https://api.artic.edu/docs/">Art Institute of Chicago API</a></span>
     </div>
     <p class="note" style="margin-top:24px">
-      2026년 11월 작성. 시장 수치는 조사기관마다 집계 범위가 달라 차이가 있습니다.
+      2026년 11월 작성, 11월 14일 고침(앱 판 846 기준). 시장 수치는 조사기관마다 집계 범위가 달라 차이가 있습니다.
       이 문서는 투자 권유를 위한 요약 자료이며, 법률·회계 검토를 대신하지 않습니다.
     </p>
   </div>
